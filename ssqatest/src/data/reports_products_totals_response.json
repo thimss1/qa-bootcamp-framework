@@ -1,0 +1,22 @@
+[
+    {
+        "slug": "external",
+        "name": "External/Affiliate product",
+        "total": 0
+    },
+    {
+        "slug": "grouped",
+        "name": "Grouped product",
+        "total": 0
+    },
+    {
+        "slug": "simple",
+        "name": "Simple product",
+        "total": 0
+    },
+    {
+        "slug": "variable",
+        "name": "Variable product",
+        "total": 0
+    }
+]

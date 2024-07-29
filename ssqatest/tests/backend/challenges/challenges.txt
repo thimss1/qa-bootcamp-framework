@@ -1,0 +1,111 @@
+
+ch1: update/customers -
+ Test a successful customer update:
+  send an HTTP PUT request to the customer endpoint with valid customer ID and updated customer
+   information such as name, email, or billing address.
+
+  Solution: ssqatest/tests/backend/customers/test_updating_a_customer.py
+
+#-------------------------------------
+
+ch2: update/customers -
+ Test an update with invalid data:
+ send an HTTP PUT request to the customer endpoint with one or more invalid fields,
+ e.g., invalid email address, unsupported characters, or incomplete data.
+
+  Solution: ssqatest/tests/backend/customers/test_updating_a_customer.py
+
+#-------------------------------------
+
+ch3: list/coupons -
+Verify that the endpoint returns the correct coupon data when provided with a valid coupon ID.
+
+  Solution: ssqatest/tests/backend/coupons/test_listing_oupons.py
+
+#-------------------------------------
+
+ch4: list/coupons -
+Test the endpoint with an invalid coupon ID to ensure that the appropriate error message is generated.
+
+  Solution: ssqatest/tests/backend/coupons/test_listing_oupons.py
+
+#-------------------------------------
+
+ch5: update/coupons -
+Verify that valid updates to existing coupon data are successfully applied by checking that the coupon
+details have changed accordingly.
+
+  Solution: ssqatest/tests/backend/coupons/test_updating_a_coupon.py
+
+#-------------------------------------
+
+ch6: delete/coupon -
+Verify that a coupon is successfully deleted when provided with a valid coupon ID.
+
+  Solution: ssqatest/tests/backend/coupons/test_deleting_a_coupon.py
+
+#-------------------------------------
+
+ch7: delete/orders -
+ Verify that a valid order can be successfully deleted using its ID.
+
+  Solution: ssqatest/tests/backend/orders/test_deleting_an_order.py
+
+#-------------------------------------
+
+ch8: delete/orders -
+Test the endpoint with an invalid order ID to ensure that the appropriate error message is generated.
+
+  Solution: ssqatest/tests/backend/orders/test_deleting_an_order.py
+
+#-------------------------------------
+
+ch9: list/orders -
+Test retrieving an order by order ID - verify that the correct order information is returned.
+
+  Solution: ssqatest/tests/backend/orders/test_retrieve_an_order.py
+
+#-------------------------------------
+
+ch10: delete/products -
+ Test deleting a product by ID -
+  verify that the product is no longer present in the system.
+
+  Solution: ssqatest/tests/backend/products/test_deleting_a_product.py
+
+#-------------------------------------
+
+ch11: update/products -
+Test adding a new attribute to an existing product -
+ verify that the new attribute is added correctly to the product.
+
+  Solution: ssqatest/tests/backend/products/test_updating_a_product.py
+
+#-------------------------------------
+
+ch12: update/products -
+Test updating product name -
+verify that the new name is updated correctly in the system.
+
+  Solution: ssqatest/tests/backend/products/test_updating_a_product.py
+
+#-------------------------------------
+
+ch13: create/tax-rate -
+Verify that a new tax rate is successfully created when all required fields are provided and valid.
+
+  Solution: ssqatest/tests/backend/tax_rates/test_creating_a_tax_rate.py
+
+#-------------------------------------
+
+ch14: update/tax-rate -
+Verify that the tax rate is successfully updated for a given valid tax rate ID.
+
+  Solution: ssqatest/tests/backend/tax_rates/test_updating_a_tax_rate.py
+
+#-------------------------------------
+
+ch15: delete/tex-rate -
+Verify that the tax rate is successfully deleted when a valid tax rate ID is provided.
+
+  Solution: ssqatest/tests/backend/tax_rates/test_deleting_a_tax_rate.py

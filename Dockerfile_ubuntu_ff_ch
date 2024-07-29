@@ -1,0 +1,50 @@
+FROM ubuntu:20.04
+
+
+# Update package lists and install dependencies
+RUN apt-get update && \
+    apt-get install -y wget gnupg2 libgtk-3-0 libdbus-glib-1-2 libxt6 libxrender1 libxtst6 libasound2 libnss3 libxss1 libx11-xcb1
+
+# Install Google Chrome
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
+    apt-get update && \
+    apt-get install -y google-chrome-stable
+
+# Install necessary packages
+#RUN apt-get update && \
+#    apt-get install -y wget gnupg2 libgtk-3-0 libdbus-glib-1-2 libxt6 libxrender1 libxtst6 libasound2 libnss3 libxss1 libx11-xcb1
+
+# Add Google Chrome signing key
+#RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+
+# Add Google Chrome repository to sources list
+#RUN echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list
+
+# Update package lists and install Google Chrome
+#RUN apt-get update && \
+ #   apt-get install -y google-chrome
+
+
+# Install Mozilla Firefox
+RUN apt-get install -y firefox
+
+# Set up the user environment
+ENV DISPLAY=:0
+
+
+
+RUN mkdir /automation
+WORKDIR /automation
+
+COPY requirements.txt .
+RUN python3 -m pip install -r requirements.txt
+
+
+COPY . /automation
+WORKDIR ../automation/ssqatest
+
+ENTRYPOINT ["python3", "-m", "pytest"]
+
+# Set the entrypoint to a shell
+# ENTRYPOINT ["/bin/bash"]

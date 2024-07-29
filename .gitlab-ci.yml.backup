@@ -1,0 +1,191 @@
+
+
+stages:
+  - run_tests
+  - publish_results
+
+
+
+variables:
+  CHROME_REMOTE_WEBDRIVER_URL: http://chrome_remote_browser:4444/wd/hub
+  FIREFOX_REMOTE_WEBDRIVER_URL: http://firefox_remote_browser:4444/wd/hub
+  EDGE_REMOTE_WEBDRIVER_URL: http://edge_remote_browser:4444/wd/hub
+  OPERA_REMOTE_WEBDRIVER_URL: http://opera_remote_browser:4444/wd/hub
+
+
+run_ssqa_smoke_backend:
+  stage:
+    run_tests
+  image: python:3.11
+  script:
+    - echo "STRING BACKEND TESTS....."
+    - export PYTHONPATH=$(pwd)
+    - pip3 install -r ./requirements.txt
+    - source ./variables_bootcamp_store.sh
+    - /bin/sh ./runner.sh ssqatest/tests/backend
+    - echo "DONE RUNNING BACKEND TESTS....."
+  artifacts:
+    when: always
+    paths:
+      - ./output
+    expire_in: 1 week
+
+
+pages:
+  stage:
+    publish_results
+  script:
+    - ls
+    - touch ./public/deleteme.html
+    - echo "<h1> Worked </h2>" >> ./public/deleteme.html
+    - ls -la /builds/ssqagroup1/qa-bootcamp-framework/ssqatest/output
+    - cp -r /builds/ssqagroup1/qa-bootcamp-framework/ssqatest/output/* ./public/
+    - pwd
+    - ls -la
+    - ls -la ./public
+    - ls -la /builds/ssqagroup1/qa-bootcamp-framework/ssqatest/output/2*
+  artifacts:
+    paths:
+      - public
+    when: always
+
+
+#run_ssqa_smoke_tests_chrome:
+#  stage:
+#    run_tests
+#  image: python:3.11
+#  variables:
+#    REMOTE_WEBDRIVER: $CHROME_REMOTE_WEBDRIVER_URL
+#    BROWSER: remote_chrome
+#  services:
+#    - name: selenium/standalone-chrome:4.7.1-20221208
+#      alias: chrome_remote_browser
+#  script:
+#    - export PYTHONPATH=$(pwd)
+##    - docker ps -a
+#    - pip3 install -r ./requirements.txt
+#    - source ./variables_local.sh
+#    - export BROWSER=$BROWSER
+#    - cd ssqatest
+#    - cat ./runner.sh
+#    - /bin/sh ./runner.sh
+#    - echo "DONE RUNNING TESTS....."
+#
+#  artifacts:
+#    when: always
+#    paths:
+##      - /builds/ssqagroup1/qa-bootcamp-framework/ssqatest/output
+#      - /builds/ssqagroup1/qa-bootcamp-framework/ssqatest/output
+#    expire_in: 1 week
+
+
+#run_ssqa_smoke_tests_firefox:
+#  stage:
+#    run_tests
+#  image: python:3.11
+#  variables:
+#    REMOTE_WEBDRIVER: $FIREFOX_REMOTE_WEBDRIVER_URL
+#    BROWSER: firefox
+#  services:
+#    - name: selenium/standalone-firefox:4.7.1-20221208
+#      alias: firefox_remote_browser
+#  script:
+#    - export PYTHONPATH=$(pwd)
+#    #    - docker ps -a
+#    - pip3 install -r ./requirements.txt
+#    - source ./boonafitautomation/env.sh
+#    - env
+#    - cd boonafitautomation
+#    - cat ./run_on_local.sh
+#    - /bin/sh ./run_on_local.sh tt4
+#    - echo "RUNNING TESTS....."
+#
+#  artifacts:
+#    paths:
+#      - /builds/supersqa/boonafitautomation/boonafitautomation
+#    expire_in: 1 week
+
+#run_ssqa_smoke_tests_edge:
+#  stage:
+#    run_tests
+#  image: python:3.11
+#  variables:
+#    REMOTE_WEBDRIVER: $edge_REMOTE_WEBDRIVER_URL
+#    BROWSER: edge
+#  services:
+#    - name: selenium/standalone-edge:beta
+#      alias: edge_remote_browser
+#  script:
+#    - export PYTHONPATH=$(pwd)
+#    #    - docker ps -a
+#    - pip3 install -r ./requirements.txt
+#    - source ./boonafitautomation/env.sh
+#    - env
+#    - cd boonafitautomation
+#    - cat ./run_on_local.sh
+#    - /bin/sh ./run_on_local.sh tt4
+#    - echo "RUNNING TESTS....."
+#
+#  artifacts:
+#    paths:
+#      - /builds/supersqa/boonafitautomation/boonafitautomation
+#    expire_in: 1 week
+
+#run_ssqa_smoke_tests_opera:
+#  stage:
+#    run_tests
+#  image: python:3.11
+#  variables:
+#    REMOTE_WEBDRIVER: $OPERA_REMOTE_WEBDRIVER_URL
+#    BROWSER: opera
+#  services:
+#    - name: selenium/standalone-opera:latest
+#      alias: opera_remote_browser
+#  script:
+#    - export PYTHONPATH=$(pwd)
+#    #    - docker ps -a
+#    - pip3 install -r ./requirements.txt
+#    - source ./boonafitautomation/env.sh
+#    - env
+#    - cd boonafitautomation
+#    - cat ./run_on_local.sh
+#    - /bin/sh ./run_on_local.sh tt4
+#    - echo "RUNNING TESTS....."
+#
+#  artifacts:
+#    paths:
+#      - /builds/supersqa/boonafitautomation/boonafitautomation
+#    expire_in: 1 week
+#
+##
+
+#https://github.com/SeleniumHQ/docker-selenium#video-recording
+#run_ssqa_smoke_tests_chrome_VIDEO:
+#  stage:
+#    run_tests
+#  image: python:3.11
+#  variables:
+#    REMOTE_WEBDRIVER: $CHROME_REMOTE_WEBDRIVER_URL
+#    BROWSER: chrome
+#  services:
+#    - name: selenium/standalone-chrome:4.7.1-20221208
+#      alias: chrome_remote_browser
+#    - name: selenium/video:ffmpeg-4.3.1-20221208
+#      alias:
+#  script:
+#    - export PYTHONPATH=$(pwd)
+#    #    - docker ps -a
+#    - pip3 install -r ./requirements.txt
+#    - source ./boonafitautomation/env.sh
+#    - env
+#    - export BROWSER=$BROWSER
+#    - env
+#    - cd boonafitautomation
+#    - cat ./run_on_local.sh
+#    - /bin/sh ./run_on_local.sh
+#    - echo "RUNNING TESTS....."
+#
+#  artifacts:
+#    paths:
+#      - /builds/supersqa/boonafitautomation/boonafitautomation
+#    expire_in: 1 week

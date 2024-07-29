@@ -1,0 +1,230 @@
+stages:
+  - run_tests
+  - publish_results
+
+
+
+variables:
+  CHROME_REMOTE_WEBDRIVER_URL: http://chrome_remote_browser:4444/wd/hub
+  FIREFOX_REMOTE_WEBDRIVER_URL: http://firefox_remote_browser:4444/wd/hub
+  EDGE_REMOTE_WEBDRIVER_URL: http://edge_remote_browser:4444/wd/hub
+  OPERA_REMOTE_WEBDRIVER_URL: http://opera_remote_browser:4444/wd/hub
+#  RESULTS_DIR: ./results/
+
+
+run_ssqa_smoke_frontend_chrome:
+  stage:
+    run_tests
+  image: python:3.11
+  variables:
+    REMOTE_WEBDRIVER: $CHROME_REMOTE_WEBDRIVER_URL
+    BROWSER: remote_chrome
+
+#    SE_OPTS: "-Xmx4g"
+  services:
+    - name: selenium/standalone-chrome:latest
+      alias: chrome_remote_browser
+#      command:
+#        - sh -c "java -Xmx4g -jar selenium-server.jar"
+  script:
+    - echo "STRING FRONTEND SMOKE TESTS....."
+    - export PYTHONPATH=$(pwd)
+    - export JUNIT_SUITE_NAME=smoke_frontend_chrome
+    - pip3 install -r ./requirements.txt
+    - source ./variables_bootcamp_store.sh
+    - timestamp=`date "+%Y%m%d%H%M%S"`
+    - output_dir=$(pwd)/output/${timestamp}
+    - export RESULTS_DIR=$output_dir
+    - /bin/sh ./runner.sh ssqatest/tests/frontend "-m smoke"
+    - echo "DONE FRONTEND SMOKE TESTS....."
+    - echo "SENDING EMAIL REPORT"
+    - export EMAIL_USER=${ADMAS_DEV_EMAIL}
+    - export EMAIL_PASS=${ADMAS_DEV_EMAIL_PASSWORD}
+    - export FILE_NAME="report.html"
+    - export EMAIL_SUBJECT="ssqa smoke frontend chrome report"
+    - python3 ./ssqatest/send_email_report.py
+    - echo "Sending results to AutomationDashboard"
+    - python3 ./ssqatest/scripts/publish_results_to_automation_dashboard.py $RESULTS_DIR/myjunit.xml
+
+  artifacts:
+    when: always
+    paths:
+      - ./output
+
+run_ssqa_smoke_frontend_firefox:
+  stage:
+    run_tests
+  image: python:3.11
+  variables:
+    REMOTE_WEBDRIVER: $FIREFOX_REMOTE_WEBDRIVER_URL
+    BROWSER: remote_firefox
+#    SE_OPTS: "-Xmx4g"
+  services:
+    - name: selenium/standalone-firefox:latest
+      alias: firefox_remote_browser
+#      command:
+#        - sh -c "java -Xmx4g -jar selenium-server.jar"
+  script:
+    - echo "STRING FRONTEND SMOKE TESTS....."
+    - export PYTHONPATH=$(pwd)
+    - export JUNIT_SUITE_NAME=smoke_frontend_firefox
+    - pip3 install -r ./requirements.txt
+    - source ./variables_bootcamp_store.sh
+    - timestamp=`date "+%Y%m%d%H%M%S"`
+    - output_dir=$(pwd)/output/${timestamp}
+    - export RESULTS_DIR=$output_dir
+    - /bin/sh ./runner.sh ssqatest/tests/frontend "-m smoke"
+    - echo "DONE FRONTEND SMOKE TESTS....."
+    - echo "SENDING EMAIL REPORT"
+    - export EMAIL_USER=${ADMAS_DEV_EMAIL}
+    - export EMAIL_PASS=${ADMAS_DEV_EMAIL_PASSWORD}
+    - export FILE_NAME="report.html"
+    - export EMAIL_SUBJECT="ssqa smoke frontend firefox report"
+    - python3 ./ssqatest/send_email_report.py
+    - echo "Sending results to AutomationDashboard"
+    - python3 ./ssqatest/scripts/publish_results_to_automation_dashboard.py $RESULTS_DIR/myjunit.xml
+#
+
+  artifacts:
+    when: always
+    paths:
+      - ./output
+run_ssqa_regression_frontend_chrome:
+  stage:
+    run_tests
+  image: python:3.11
+  variables:
+    REMOTE_WEBDRIVER: $CHROME_REMOTE_WEBDRIVER_URL
+    BROWSER: remote_chrome
+
+#    SE_OPTS: "-Xmx4g"
+  services:
+    - name: selenium/standalone-chrome:latest
+      alias: chrome_remote_browser
+#      command:
+#        - sh -c "java -Xmx4g -jar selenium-server.jar"
+  script:
+    - echo "STRING FRONTEND SMOKE TESTS....."
+    - export PYTHONPATH=$(pwd)
+    - export JUNIT_SUITE_NAME=regression_frontend_chrome
+    - pip3 install -r ./requirements.txt
+    - source ./variables_bootcamp_store.sh
+    - timestamp=`date "+%Y%m%d%H%M%S"`
+    - output_dir=$(pwd)/output/${timestamp}
+    - export RESULTS_DIR=$output_dir
+    - /bin/sh ./runner.sh ssqatest/tests/frontend "-m regression"
+    - echo "DONE FRONTEND REGRESSION TESTS....."
+    - echo "SENDING EMAIL REPORT"
+    - export EMAIL_USER=${ADMAS_DEV_EMAIL}
+    - export EMAIL_PASS=${ADMAS_DEV_EMAIL_PASSWORD}
+    - export FILE_NAME="report.html"
+    - export EMAIL_SUBJECT="ssqa regression frontend chrome report"
+    - python3 ./ssqatest/send_email_report.py
+    - echo "Sending results to AutomationDashboard"
+    - python3 ./ssqatest/scripts/publish_results_to_automation_dashboard.py $RESULTS_DIR/myjunit.xml
+
+
+  artifacts:
+    when: always
+    paths:
+      - ./output
+
+run_ssqa_regression_frontend_firefox:
+  stage:
+    run_tests
+  image: python:3.11
+  variables:
+    REMOTE_WEBDRIVER: $FIREFOX_REMOTE_WEBDRIVER_URL
+    BROWSER: remote_firefox
+#    SE_OPTS: "-Xmx4g"
+  services:
+    - name: selenium/standalone-firefox:latest
+      alias: firefox_remote_browser
+#      command:
+#        - sh -c "java -Xmx4g -jar selenium-server.jar"
+  script:
+    - echo "STRING FRONTEND SMOKE TESTS....."
+    - export PYTHONPATH=$(pwd)
+    - export JUNIT_SUITE_NAME=regression_frontend_firefox
+    - pip3 install -r ./requirements.txt
+    - source ./variables_bootcamp_store.sh
+    - timestamp=`date "+%Y%m%d%H%M%S"`
+    - output_dir=$(pwd)/output/${timestamp}
+    - export RESULTS_DIR=$output_dir
+    - /bin/sh ./runner.sh ssqatest/tests/frontend "-m regression"
+    - echo "DONE FRONTEND SMOKE TESTS....."
+    - echo "SENDING EMAIL REPORT"
+    - export EMAIL_USER=${ADMAS_DEV_EMAIL}
+    - export EMAIL_PASS=${ADMAS_DEV_EMAIL_PASSWORD}
+    - export FILE_NAME="report.html"
+    - export EMAIL_SUBJECT="ssqa regression frontend firefox report"
+    - python3 ./ssqatest/send_email_report.py
+    - echo "Sending results to AutomationDashboard"
+    - python3 ./ssqatest/scripts/publish_results_to_automation_dashboard.py $RESULTS_DIR/myjunit.xml
+
+  artifacts:
+    when: always
+    paths:
+      - ./output
+
+
+run_ssqa_smoke_backend:
+  stage:
+    run_tests
+  image: python:3.11
+  variables:
+    JUNIT_SUITE_NAME: ssqa_smoke_backend
+  script:
+    - echo "STARTING BACKEND TESTS....."
+    - export PYTHONPATH=$(pwd)
+    - export JUNIT_SUITE_NAME=smoke_backend
+    - pip3 install -r ./requirements.txt
+    - source ./variables_bootcamp_store.sh
+    - timestamp=`date "+%Y%m%d%H%M%S"`
+    - output_dir=$(pwd)/output/${timestamp}
+    - export RESULTS_DIR=$output_dir
+    - /bin/sh ./runner.sh ssqatest/tests/backend "-m smoke"
+    - echo "DONE RUNNING BACKEND TESTS....."
+    - echo "SENDING EMAIL REPORT"
+    - export EMAIL_USER=${ADMAS_DEV_EMAIL}
+    - export EMAIL_PASS=${ADMAS_DEV_EMAIL_PASSWORD}
+    - export FILE_NAME="report.html"
+    - export EMAIL_SUBJECT="ssqa smoke backend report"
+    - python3 ./ssqatest/send_email_report.py
+    - echo "Sending results to AutomationDashboard"
+    - python3 ./ssqatest/scripts/publish_results_to_automation_dashboard.py $RESULTS_DIR/myjunit.xml
+
+  artifacts:
+    when: always
+    paths:
+      - ./output
+
+run_ssqa_regression_backend:
+  stage:
+    run_tests
+  image: python:3.11
+  variables:
+    JUNIT_SUITE_NAME: smoke_backend
+  script:
+    - echo "STARTING BACKEND TESTS....."
+    - export PYTHONPATH=$(pwd)
+    - export JUNIT_SUITE_NAME=regression backend
+    - pip3 install -r ./requirements.txt
+    - source ./variables_bootcamp_store.sh
+    - timestamp=`date "+%Y%m%d%H%M%S"`
+    - output_dir=$(pwd)/output/${timestamp}
+    - export RESULTS_DIR=$output_dir
+    - /bin/sh ./runner.sh ssqatest/tests/backend "-m regression"
+    - echo "DONE RUNNING BACKEND TESTS....."
+    - echo "SENDING EMAIL REPORT"
+    - export EMAIL_USER=${ADMAS_DEV_EMAIL}
+    - export EMAIL_PASS=${ADMAS_DEV_EMAIL_PASSWORD}
+    - export FILE_NAME="report.html"
+    - export EMAIL_SUBJECT="ssqa regression backend report"
+    - python3 ./ssqatest/send_email_report.py
+    - echo "Sending results to AutomationDashboard"
+    - python3 ./ssqatest/scripts/publish_results_to_automation_dashboard.py $RESULTS_DIR/myjunit.xml
+  artifacts:
+    when: always
+    paths:
+      - ./output

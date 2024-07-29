@@ -1,0 +1,26 @@
+FROM centos:7
+
+# Install necessary packages
+RUN yum update -y && \
+    yum install -y wget gnupg2 libdbus-glib libXtst libXrender libX11 libX11-xcb libXi libXext libXcomposite libXdamage libXrandr libXcursor libXss GConf2 alsa-lib atk cups-libs gtk3 liberation-fonts liberation-fonts-common liberation-mono-fonts liberation-narrow-fonts liberation-sans-fonts liberation-serif-fonts libdrm libgbm libpng libwayland-client libwayland-cursor libwayland-egl libxcb libxshmfence pango xdg-utils python3 python3-devel python3-pip python3-setuptools python3-test python3-wheel python3.10 python3.10-devel --disablerepo=appstream
+
+# Add Google Chrome signing key
+RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | rpm --import -
+
+# Add Google Chrome repository to sources list
+RUN echo -e "[google-chrome]\nname=google-chrome\nbaseurl=http://dl.google.com/linux/chrome/rpm/stable/\$basearch\nenabled=1\ngpgcheck=1\ngpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub" > /etc/yum.repos.d/google-chrome.repo
+
+# Install Google Chrome
+RUN yum install -y google-chrome-stable --disablerepo=appstream
+
+# Add Mozilla Firefox repository to sources list
+RUN echo -e "[mozilla]\nname=Mozilla Repository\nbaseurl=http://mozilla.org/\$os/\$releasever/main\nenabled=1\ngpgcheck=1" > /etc/yum.repos.d/mozilla.repo
+
+# Install Mozilla Firefox
+RUN yum install -y firefox --disablerepo=appstream
+
+# Install Selenium
+RUN pip3 install selenium
+
+# Set the entrypoint to a shell
+ENTRYPOINT ["/bin/bash"]
